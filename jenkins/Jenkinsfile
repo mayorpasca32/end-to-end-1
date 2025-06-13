@@ -1,0 +1,21 @@
+pipeline {
+  agent any
+  stages {
+    stage('Checkout Code') {
+      steps {
+        git 'https://github.com/yourusername/devops-project.git'
+      }
+    }
+    stage('Build Docker Image') {
+      steps {
+        sh 'docker build -t myapp:latest ./docker'
+      }
+    }
+    stage('Deploy to Minikube') {
+      steps {
+        sh 'kubectl apply -f kubernetes/deployment.yaml'
+        sh 'kubectl apply -f kubernetes/service.yaml'
+      }
+    }
+  }
+}
