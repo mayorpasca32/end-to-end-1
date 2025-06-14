@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // Jenkins credentials id
+        DOCKERHUB_CREDENTIALS = credentials('794cbfdd-e4cf-4e22-aba3-dfdf10050e98') // Jenkins credentials id
         DOCKER_IMAGE = 'mayorpasca32/bodybuilderhub:latest'
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/mayorpasca32/your-repo.git'
+                git 'https://github.com/mayorpasca32/https://github.com/mayorpasca32/end-to-end-1.git'
             }
         }
 
@@ -21,7 +21,7 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'Popoola32', usernameVariable: 'mayorpasca32')]) {
+                withCredentials([usernamePassword(credentialsId: '794cbfdd-e4cf-4e22-aba3-dfdf10050e98', passwordVariable: 'Popoola32', usernameVariable: 'mayorpasca32')]) {
                     sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
                     sh 'docker push $DOCKER_IMAGE'
                     sh 'docker logout'
