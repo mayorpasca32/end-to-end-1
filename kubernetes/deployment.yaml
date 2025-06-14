@@ -1,19 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapp
+  name: bodybuilderhub-deployment
+  labels:
+    app: bodybuilderhub
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
-      app: myapp
+      app: bodybuilderhub
   template:
     metadata:
       labels:
-        app: myapp
+        app: bodybuilderhub
     spec:
       containers:
-        - name: myapp
-          image: myapp:latest
-          ports:
-            - containerPort: 3000
+      - name: bodybuilderhub
+        image: yourdockerhubusername/bodybuilderhub:latest
+        ports:
+        - containerPort: 3000
+        imagePullPolicy: Always
