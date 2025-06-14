@@ -1,21 +1,39 @@
 pipeline {
-  agent any
-  stages {
-    stage('Checkout Code') {
-      steps {
-        git 'https://github.com/yourusername/devops-project.git'
-      }
+    agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // Jenkins credentials id
+        DOCKER_IMAGE = 'mayorpasca32/bodybuilderhub:latest'
     }
-    stage('Build Docker Image') {
-      steps {
-        sh 'docker build -t myapp:latest ./docker'
-      }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git 'https://github.com/mayorpasca32/your-repo.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $DOCKER_IMAGE .'
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'Popoola32', usernameVariable: 'mayorpasca32')]) {
+                    sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
+                    sh 'docker push $DOCKER_IMAGE'
+                    sh 'docker logout'
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh 'kubectl apply -f k8s/deployment.yaml'
+                sh 'kubectl apply -f k8s/service.yaml'
+            }
+        }
     }
-    stage('Deploy to Minikube') {
-      steps {
-        sh 'kubectl apply -f kubernetes/deployment.yaml'
-        sh 'kubectl apply -f kubernetes/service.yaml'
-      }
-    }
-  }
 }
