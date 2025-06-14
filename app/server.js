@@ -1,7 +1,25 @@
 const express = require('express');
+const path = require('path');
+
 const app = express();
-const PORT = 3000;
+const port = 3000;
 
-app.get('/', (req, res) => res.send('Hello from Local DevOps Pipeline!'));
+// Set static folder
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.listen(PORT, () => console.log(`App running on port ${PORT}`));
+// Routes
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
+
+app.get('/about', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'about.html'));
+});
+
+app.get('/workouts', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'workouts.html'));
+});
+
+app.listen(port, () => {
+  console.log(`Bodybuilder Hub running on http://localhost:${port}`);
+});
