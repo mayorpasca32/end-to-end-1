@@ -7,12 +7,12 @@ pipeline {
         DOCKER_IMAGE = 'mayorpasca32/bodybuilderhub:latest'
     }
 
-    stages {
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/mayorpasca32/https://github.com/mayorpasca32/end-to-end-1.git'
+                 git url: 'https://github.com/mayorpasca32/end-to-end-1.git', branch: 'main'
             }
         }
+    
 
         stage('Build Docker Image') {
             steps {
