@@ -1,40 +1,42 @@
-
 pipeline {
     agent any
 
-    environment {
-        DOCKERHUB_CREDENTIALS = credentials('794cbfdd-e4cf-4e22-aba3-dfdf10050e98') // Jenkins credentials id
-        DOCKER_IMAGE = 'mayorpasca32/bodybuilderhub:latest'
-    }
-
-        stage('Checkout Code') {
+    stages {
+        stage('Checkout') {
             steps {
-                 git url: 'https://github.com/mayorpasca32/end-to-end-1.git', branch: 'main'
+                git 'https://github.com/mayorpasca32/end-to-end-1.git'
             }
         }
-    
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE .'
+                sh 'docker build -t mayorpasca32/bodybuilder-app:latest ./app'
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: '794cbfdd-e4cf-4e22-aba3-dfdf10050e98', passwordVariable: 'Popoola32', usernameVariable: 'mayorpasca32')]) {
-                    sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
-                    sh 'docker push $DOCKER_IMAGE'
-                    sh 'docker logout'
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                    sh 'docker push mayorpasca32/bodybuilder-app:latest'
                 }
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        stage('Deploy to Minikube') {
             steps {
                 sh 'kubectl apply -f k8s/deployment.yaml'
                 sh 'kubectl apply -f k8s/service.yaml'
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            echo 'Deployment failed!'
         }
     }
 }
