@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: bodybuilderhub
-        image: yourdockerhubusername/bodybuilderhub:latest
+        image: mayorpasca32/bodybuilderhub:latest
         ports:
         - containerPort: 3000
         imagePullPolicy: Always
