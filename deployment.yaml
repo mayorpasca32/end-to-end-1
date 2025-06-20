@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bodybuilderhub-deployment
-  labels:
-    app: bodybuilderhub
 spec:
   replicas: 3
   selector:
@@ -15,9 +13,9 @@ spec:
         app: bodybuilderhub
     spec:
       containers:
-      - name: bodybuilderhub
+      - name: bodybuilderhub-container
         image: bodybuilder-app:latest
-        imagePullPolicy: Never
+        imagePullPolicy: Never       # ← tell k8s to use local image only
         ports:
         - containerPort: 3000
-        imagePullPolicy: Always
+
