@@ -16,9 +16,7 @@ spec:
     spec:
       containers:
       - name: bodybuilderhub
-        image: bodybuilder-app:latest
-        imagePullPolicy: Never
-
+        image: mayorpasca32/bodybuilder-app:latest
         ports:
         - containerPort: 3000
         imagePullPolicy: Always
