@@ -1,11 +1,13 @@
 pipeline {
     agent any
+    
 
     environment {
         IMAGE_NAME = "bodybuilder-app:latest"
-        KUBECONFIG = "/home/mayorpasca32/.kube/config"
+        KUBECONFIG = "/var/lib/jenkins/.kube/config"
     }
 
+    
     stages {
         stage('Checkout') {
             steps {
