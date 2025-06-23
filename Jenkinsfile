@@ -1,17 +1,15 @@
 pipeline {
     agent any
-    
 
     environment {
         IMAGE_NAME = "bodybuilder-app:latest"
         KUBECONFIG = "/var/lib/jenkins/.kube/config"
     }
 
-    
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/mayorpasca32/end-to-end-1.git'
+                git 'https://github.com/mayorpasca32/end-to-end-1.git'
             }
         }
 
@@ -27,7 +25,7 @@ pipeline {
         stage('Deploy to Minikube') {
             steps {
                 sh '''
-                    export KUBECONFIG=$KUBECONFIG
+                    export KUBECONFIG=/var/lib/jenkins/.kube/config
                     kubectl apply -f deployment.yaml
                     kubectl apply -f service.yaml
                 '''
