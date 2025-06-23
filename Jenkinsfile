@@ -7,12 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/mayorpasca32/end-to-end-1.git'
-            }
-        }
-
         stage('Build Docker Image in Minikube') {
             steps {
                 sh '''
