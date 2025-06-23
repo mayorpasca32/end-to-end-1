@@ -17,12 +17,13 @@ pipeline {
 
         stage('Deploy to Minikube') {
             steps {
+                withEnv(["KUBECONFIG=/home/mayorpasca32/.kube/config"]) {
                 sh 'kubectl apply -f deployment.yaml'
                 sh 'kubectl apply -f service.yaml'
             }
         }
     }
-
+    
     post {
         success {
             echo 'Deployment successful!'
