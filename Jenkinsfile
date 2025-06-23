@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/mayorpasca32/end-to-end-1.git'
+                git branch: 'main', url: 'https://github.com/mayorpasca32/end-to-end-1.git'
             }
         }
 
@@ -24,18 +24,21 @@ pipeline {
 
         stage('Deploy to Minikube') {
             steps {
-                sh 'kubectl apply -f deployment.yaml'
-                sh 'kubectl apply -f service.yaml'
+                sh '''
+                    export KUBECONFIG=$KUBECONFIG
+                    kubectl apply -f deployment.yaml
+                    kubectl apply -f service.yaml
+                '''
             }
         }
     }
 
     post {
         success {
-            echo 'Deployment successful!'
+            echo '✅ Deployment successful!'
         }
         failure {
-            echo 'Deployment failed!'
+            echo '❌ Deployment failed!'
         }
     }
 }
