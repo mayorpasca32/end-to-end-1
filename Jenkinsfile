@@ -3,9 +3,16 @@ pipeline {
 
     environment {
         IMAGE_NAME = "bodybuilder-app:latest"
+        KUBECONFIG = "/home/mayorpasca32/.kube/config"
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/mayorpasca32/end-to-end-1.git'
+            }
+        }
+
         stage('Build Docker Image in Minikube') {
             steps {
                 sh '''
@@ -17,13 +24,12 @@ pipeline {
 
         stage('Deploy to Minikube') {
             steps {
-                withEnv(["KUBECONFIG=/home/mayorpasca32/.kube/config"]) {
                 sh 'kubectl apply -f deployment.yaml'
                 sh 'kubectl apply -f service.yaml'
             }
         }
     }
-    
+
     post {
         success {
             echo 'Deployment successful!'
